@@ -4,6 +4,9 @@ import nodePath from "node:path";
 import { fromDeno, verifyDenoVersion } from "./minifiers/deno.ts";
 import type { EleventyMinifyOptions } from "./options.ts";
 
+/** A generic `minify` function. It takes the same options as the Eleventy
+ * plugin, except the `directory` option is required. All files within the
+ * given directory are minifier using the specified options and minifiers. */
 export async function minify(
   options: EleventyMinifyOptions & { directory: string },
 ): Promise<void> {
