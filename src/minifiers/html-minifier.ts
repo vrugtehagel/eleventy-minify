@@ -26,8 +26,8 @@ export function fromHtmlMinifier(
     _extension: string,
     minifiers: Record<string, Minifier>,
   ): Promise<string> {
-    if (minifiers.css) config.minifyCSS ??= minifiers.css;
-    if (minifiers.js) config.minifyJS ??= minifiers.js;
+    if (minifiers.css) config.minifyCSS ??= getMinifier("css", minifiers);
+    if (minifiers.js) config.minifyJS ??= getMinifier("js", minifiers);
     return await htmlMinifier.minify(source, config);
   }
   async function fromPath(
@@ -41,4 +41,12 @@ export function fromHtmlMinifier(
   }
   const extensions = ["html"];
   return { extensions, fromPath, fromString };
+}
+
+function getMinifier(
+  type: string,
+  minifiers: Record<string, Minifier>,
+): (source: string) => Promise<string> | string {
+  const minifier = minifiers[type as keyof typeof minifiers];
+  return (source: string) => minifier.fromString(source, type, minifiers);
 }
