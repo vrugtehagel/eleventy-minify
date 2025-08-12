@@ -11,11 +11,12 @@ export function fromEsbuild(
   esbuild: Esbuild,
   options: EsbuildOptions = {},
 ): Minifier {
-  const config = { minify: true, allowOverwrite: true, ...options };
+  const config = { minify: true, ...options };
+  const buildConfig = { allowOverwrite: true, ...config };
   async function fromPath(path: string): Promise<void> {
     const entryPoints = [path];
     const outfile = path;
-    await esbuild.build({ ...config, entryPoints, outfile });
+    await esbuild.build({ ...buildConfig, entryPoints, outfile });
   }
   async function fromString(
     source: string,
